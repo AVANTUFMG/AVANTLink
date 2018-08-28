@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include<mavlink.h>
+
 #define buffer_size 2041 //A documentação oficial do MAVLINK manda botar esse valor, mas tbm não sabem pq
 
 
@@ -73,6 +75,7 @@ void AVANTConnect::open_connection(int domain,int type, int protocol) //Cria um 
 
 int AVANTConnect::send_msg(mavlink_message_t msg)
 {
+    int temp = 0;
     socklen_t output_size;
 
     unsigned char buffer[buffer_size+1];
@@ -85,10 +88,79 @@ int AVANTConnect::send_msg(mavlink_message_t msg)
 
     memset(buffer, 0, buffer_size);
     ssize_t received_msg_size = recvfrom(sock, (void *)buffer, buffer_size, 0, (struct sockaddr *)&out_connection, &output_size);
+
+		memset(buffer, 0, buffer_size);
+		//sleep(1); // Sleep one second
+
     //registraL(tam_recebido);
     memset(buffer, 0, buffer_size);
 
     return sent;
+}
+
+int AVANTConnect::receive_msg(int id,int field)
+{
+    mavlink_message_t msg;
+    int temp = 0;
+    socklen_t output_size;
+
+    unsigned char buffer[buffer_size+1];
+    logcatln("Receiving message: ");
+
+    int msg_size = mavlink_msg_to_send_buffer(buffer, &msg);
+    while(msg_size>1)
+    {
+    //Imprimir msg aq (MAV decode)
+        int sent = sendto(sock,buffer,msg_size, 0, (struct sockaddr*)&out_connection, sizeof(struct sockaddr_in));
+
+        memset(buffer, 0, buffer_size);
+
+        ssize_t received_msg_size = recvfrom(sock, (void *)buffer, buffer_size, 0, (struct sockaddr *)&out_connection, &output_size);
+            if (received_msg_size > 0)
+            {
+                // Something received - print out all bytes and parse packet
+                mavlink_message_t a;
+                mavlink_status_t status;
+
+                //logcat("Bytes Received:");
+                //ogcatln((int)received_msg_size);
+                //logcat("Datagram: ");
+                for (int i = 0; i < received_msg_size; ++i)
+                {
+                    temp = buffer[i];
+                    //logcat((unsigned char)temp);
+                    //logcat(" ");
+                    if (mavlink_parse_char(MAVLINK_COMM_0, buffer[i], &a, &status))
+                    {
+                        switch(a.msgid)
+                        {
+                            case 33:
+                            switch(field)
+                            {
+                                case 4:
+                                mavlink_global_position_int_t payload;
+                                mavlink_msg_global_position_int_decode(&a,&payload);
+                                logcat("ALTITUDE=");
+                                logcatln(payload.relative_alt);
+                                break;
+                            }
+                            break;
+                        }
+
+
+                        //logcat("MSG ID:");
+                        //logcat(a.msgid);
+                        //logcatln("");
+                        // Packet received
+                        /*logcat("\nReceived packet: LEN:");
+                        logcat(a.sysid);*/
+                    }
+                }
+                //logcatln("");
+            }
+            memset(buffer, 0, buffer_size);
+    }
+    return 0;
 }
 
 

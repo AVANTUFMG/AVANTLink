@@ -18,6 +18,7 @@ class AVANTConnect
         void print_ip();
         void open_connection(int,int,int);
         int send_msg(mavlink_message_t mensagem);
+        int receive_msg(int,int);
 
     protected:
 
