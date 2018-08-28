@@ -5,7 +5,7 @@
 #include <AVANTLink.h>
 
 //Configuração da conexão com o MAVProxy
-const std::string ip_adress = "192.168.0.24";
+const std::string ip_adress = "localhost";
 const int in_port = 14551;
 const int out_port = 14550;
 
@@ -19,13 +19,15 @@ int main(int argc, char* argv[])
 
     Aircraft zagi;
 
+    //zagi.send_heartbeat(s);
+    //zagi.arm_throttle(s);
+    //zagi.rc_override_ch3(s,1800);
+    //zagi.set_relay(s,2,1);
+
 	while(true)
     {
-        int a = zagi.arm_throttle(s);
-
-
-		//printf("%d\n",bytes_sent);
-		sleep(1); // Sleep one second
+        //zagi.get_rc_ch3(s);
+        zagi.get_altitude(s);
     }
 }
 
