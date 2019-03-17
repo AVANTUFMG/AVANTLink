@@ -7,7 +7,7 @@ Point search_path(double lat_drone, double lon_drone, double h_drone, double lat
     Point destiny(lat_dest, lon_dest, h_dest);
     int arrived = 0;
     int pos = -1;
-     //M.print_malha();
+    //M.print_malha();
     //obstacle OBS(-19.87201, -43.97022, 90, 1);
     //add_obs(M, OBS);
 
@@ -23,14 +23,17 @@ Point search_path(double lat_drone, double lon_drone, double h_drone, double lat
         }
         else{
 
-            pos_aux = pos - 1;
+            pos_aux = pos - 1; //ponto "a esquerda do drone"
+            //cout<<M.get_malha()[pos_aux].distance_from(destiny) << endl;
             if(M.get_malha()[pos_aux].get_obs() != 1){
                 distance = M.get_malha()[pos_aux].distance_from(destiny);
+
             }
-            //cout << "distancia = " << distance <<endl;
+           // cout << "distancia = " << distance <<endl;
 
 
-            pos_aux2 = pos + 1;
+            pos_aux2 = pos + 1; //=ponto "a direita do drone"
+            //cout<<M.get_malha()[pos_aux2].distance_from(destiny) << endl;
             if(M.get_malha()[pos_aux2].get_obs() != 1){
                 distance_aux = M.get_malha()[pos_aux2].distance_from(destiny);
                 if(distance_aux < distance){distance = distance_aux; pos_aux = pos_aux2;}
@@ -38,7 +41,8 @@ Point search_path(double lat_drone, double lon_drone, double h_drone, double lat
             //cout << "distancia = " << distance <<endl;
 
 
-            pos_aux2 = pos - (M.get_N_lat()*2 + 1);
+            pos_aux2 = pos - (M.get_N_lat()*2 + 1); //ponto "atras do drone"
+            //cout<<M.get_malha()[pos_aux2].distance_from(destiny) << endl;
             if(M.get_malha()[pos_aux2].get_obs() != 1){
                 distance_aux = M.get_malha()[pos_aux2].distance_from(destiny);
                 if(distance_aux < distance){distance = distance_aux; pos_aux = pos_aux2;}
@@ -46,15 +50,21 @@ Point search_path(double lat_drone, double lon_drone, double h_drone, double lat
             //cout << "distancia = " << distance <<endl;
 
 
-            pos_aux2 = pos + (M.get_N_lat()*2 + 1);
+            pos_aux2 = pos + (M.get_N_lat()*2 + 1); //ponto "a frente do drone"
+            //cout<<M.get_malha()[pos_aux2].distance_from(destiny) << endl;
             if(M.get_malha()[pos_aux2].get_obs() != 1){
                 distance_aux = M.get_malha()[pos_aux2].distance_from(destiny);
                 if(distance_aux < distance){distance = distance_aux; pos_aux = pos_aux2;}
             }
-            //cout << "distancia = " << distance <<endl
+            //cout << "distancia = " << distance <<endl;
 
             pos = pos_aux;
+           // cout<< "------------------------------------------" <<endl;
+
+            if(distance < 7){
             arrived = 1;
+            //M.get_malha()[pos].print_point();
+            }
         }
     }while(arrived == 0);
     return M.get_malha()[pos];
