@@ -45,10 +45,10 @@ void Malha::print_malha_xyz(){
 }
 
 
-//Functions-----------------------------------------------------------
+//Functions--------------------------------------------------------------------------
  double D_to_RAD(double D_x){
         double R_x;
-        R_x = D_x*(pi/180);
+        R_x = D_x*(M_PI/180);
         return(R_x);
     }
 
@@ -61,8 +61,9 @@ double DELTA(double start, double destiny){
 
 double distance_two_points(double lat1, double lat2, double delta_lon, double delta_lat, double radius){
         double a, b, dist;
-        a = ((pow(sin((delta_lat/2)),2)) + cos(lat1))*(cos(lat2))*(pow(sin((delta_lon/2)), 2));
-        b = 2 * (atan((sqrt(a)/(sqrt(1-a)))));
+
+        a = (pow(sin((delta_lat/2)),2)) + cos(lat1)*(cos(lat2))*(pow(sin((delta_lon/2)), 2));
+        b = 2 * (atan2(sqrt(a), sqrt(1-a)));
         dist = radius*b;
         return (dist);
     }
@@ -82,13 +83,7 @@ double distance_between_two_points(double D_lat, double D_lon, double D_lat_dest
         delta_lon = DELTA(R_lon, R_lon_destiny);
 
         //calculating radius
-        /*
-        R_polar = 6357;
-        R_equat = 6378;
-        e = (1-((R_polar*R_polar)/(R_equat*R_equat)));
-        e = pow(e,0.5);
-        R = (R_equat*(1-(e*e)))/ (pow((1- (e*e*sin(D_lat)*sin(D_lat))), 3/2));*/
-        R = (EARTH_R - (21*sin(D_lat)));
+        R = (EARTH_R - (21.385*sin(D_lat)));
 
         //calculating distance
         distance = distance_two_points(R_lat, R_lat_destiny, delta_lon, delta_lat, R);

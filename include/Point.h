@@ -5,7 +5,7 @@
 #include <cmath>
 #include <vector>
 #define pi 3.14159
-#define EARTH_R 6378
+#define EARTH_R 6378137
 
 //recives latitude,longitude,heigh
 //INTERESSANTE FAZER CONSTRUTOR COPIA E DESTRUTOR PARA A MALHA E TALVEZ SOBRECARREGAR =
