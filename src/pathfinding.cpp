@@ -1,12 +1,13 @@
 #include "pathfinding.h"
 using namespace std;
 
-Point search_path(double lat_drone, double lon_drone, double h_drone, double lat_dest, double lon_dest, double h_dest){
+vector <Point> search_path(double lat_drone, double lon_drone, double h_drone, double lat_dest, double lon_dest, double h_dest){
    //Fazer o construtor e destrutor copia da malha pode ser uma otima ideia
     Malha M = transf(lat_drone, lon_drone, h_drone);
     Point destiny(lat_dest, lon_dest, h_dest);
     int arrived = 0;
     int pos = -1;
+    vector <Point> points_list;
     //M.print_malha();
     //obstacle OBS(-19.87201, -43.97022, 90, 1);
     //add_obs(M, OBS);
@@ -59,6 +60,7 @@ Point search_path(double lat_drone, double lon_drone, double h_drone, double lat
             //cout << "distancia = " << distance <<endl;
 
             pos = pos_aux;
+            points_list.push_back(M.get_malha()[pos]);
            // cout<< "------------------------------------------" <<endl;
 
             if(distance < 7){
@@ -67,5 +69,6 @@ Point search_path(double lat_drone, double lon_drone, double h_drone, double lat
             }
         }
     }while(arrived == 0);
-    return M.get_malha()[pos];
-}
+
+    return points_list;
+    }
