@@ -6,18 +6,18 @@ using namespace std;
 Malha::Malha(Point &P){
     //VANT in (x,y,z) = (0,0,0)
     int c = 0; //counter
-    N_lat = 2;
-    N_lon = 2;
-    //N_H = 0;
+    N_lat = 1;
+    N_lon = 1;
+    N_H = 4;
 
     P.set_x(0);
     P.set_y(0);
     P.set_z(0);
 
-    for(int k = 0; k<= 0; k++){
+    for(int k = 0; k<= N_H; k++){
         for(int j = -N_lon; j<=N_lon; j++){
             for(int i = -N_lat; i<=N_lat;i++){
-                Point aux(P.get_latitude() - (i*0.000135),P.get_longitude() - (j*0.000135), P.get_height() + 15*k);
+                Point aux(P.get_latitude() + (i*0.000135),P.get_longitude() + (j*0.000135), P.get_height() + 15*k);
                 aux.set_x(i*15);
                 aux.set_y(j*15);
                 aux.set_z(k*15);
@@ -106,32 +106,44 @@ double Point::distance_from(double Dlat, double Dlon){
 //double transf(double lat, double lon, double h, double r, double lat_o, double lon_o){
 Malha transf(double lat, double lon, double h){
 
-    //falta colocar parte dos obstaculos
     Point P(lat,lon, h);
     Malha M(P);
-
-    //Funcao do iure chamaria algo como:
-    //Point D = a_star(M.get_malha);
-    //mas é melhor o pathfinding chamar as funcoes daqui, e nao o contrario.
 
     return M;
 }
 
 //obstacles----------------------------------------------------------------------------------
 
-//PRECISA DE MAIS TESTES
-void add_obs (Malha &M, obstacle &O){
-    //double length = 2*O.get_radius();
-    // 1 degree = 111,139 m or 1m = 1/111139 degrees
-    double lat_i, lat_f, lon_i, lon_f;
 
-    lat_i = O.get_obs_lat() - (O.get_radius()*(1/111139));
-    lat_f = O.get_obs_lat() + (O.get_radius()*(1/111139));
-    lon_i = O.get_obs_lon() - (O.get_radius()*(1/111139));
-    lon_f = O.get_obs_lon() + (O.get_radius()*(1/111139));
+//Sobrecarga de =
+obstacle& obstacle::operator=(const obstacle& o){
+
+    height = o.height;
+
+    radius = o.radius;
+
+    obs_lat = o.obs_lat;
+
+    obs_lon = o.obs_lon;
+
+    return *this;
+
+}
+
+void add_obs (Malha &M, obstacle &O){
+
+    cout.precision(10);
+    // 1 degree = 111,139 m or 1m = 1/111139 degrees
+    double lat_i, lat_f, lon_i, lon_f, division;
+    division = 1.0/111139;
+
+    lat_i = O.get_obs_lat() - (O.get_radius()*division);
+    lat_f = O.get_obs_lat() + (O.get_radius()*division);
+    lon_i = O.get_obs_lon() - (O.get_radius()*division);
+    lon_f = O.get_obs_lon() + (O.get_radius()*division);
 
     for(int i = 0; i<M.malha.size();i++){
-        if(M.malha[i].get_latitude() >= lat_i && M.malha[i].get_latitude()<= lat_f){
+        if(M.malha[i].get_latitude() >= lat_i && M.malha[i].get_latitude() <= lat_f ){
                 if(M.malha[i].get_longitude() >= lon_i && M.malha[i].get_longitude() <= lon_f){
                     if(M.malha[i].get_height() <= O.get_obs_height()){
                          M.malha[i].set_obs_true();
@@ -139,5 +151,60 @@ void add_obs (Malha &M, obstacle &O){
                 }
             }
         }
+
+}
+
+//gerador de obstáculos
+obstacle gen_rand(Malha& m){
+
+    double o_height, o_radius, o_lat, o_lon;
+
+    double r1, r2, r3, r4;
+
+    /*inicializando random seed*/
+
+    srand (time(NULL));
+
+    /*random height, 30ft to 750ft*/
+
+    r1 = (double)rand()/RAND_MAX; //228.600 9.144;
+
+    o_height = 9.144 + r1*(228.600+9.144);
+
+    //como rand é um int, para fazer a comversão em double
+
+    //foi neceessário o desmenbramento da função em duas equações diferentes
+
+    //min + r*(max - min), onde r é o fator de randomização.
+
+    /*random radius, 30ft to 300ft*/
+
+    r2 = (double)rand()/RAND_MAX; //91.440 9.144;
+
+    o_radius = 9.144 + r2*(91.440+9.144);
+
+    /*random latitude, inside campus*/
+
+    // min_lat -> m.malha[malha.begin()].get_latitude();
+
+    // max_lat -> m.malha[malha.end()].get_latitude();
+
+    r3 = (double)rand()/RAND_MAX; //-19.871675 -19.866909;
+
+    o_lat = (-19.871675) +  r3*((-19.866909)-(-19.871675));
+
+    /*random longitude, inside campus*/
+
+    // min_lon -> m.malha[malha.begin()].get_longitude();
+
+    // max_lon -> m.malha[malha.end()].get_longitude();
+
+    r4 = (double)rand()/RAND_MAX; //-43.965245 -43.959322;
+
+    o_lon = (-43.965245) + r4*((-43.959322)-(-43.965245));
+
+    obstacle ran_obs(o_lat, o_lon, o_height, o_radius);//cria objeto
+
+    return ran_obs;
 
 }

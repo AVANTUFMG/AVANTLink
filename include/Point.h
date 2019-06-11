@@ -62,7 +62,7 @@ class Point
         double distance_from(double Dlat, double Dlon);
 
         //prints
-        void print_point(){cout.precision(10); cout<< "X: "<< x <<", lat: " << latitude <<" | Y: "<< y<<", lon: "<<longitude << " | Z: "<<z <<", height: "<<height <<endl;}
+        void print_point(){cout.precision(10); cout<< "X: "<< x <<", lat: " << latitude <<" | Y: "<< y<<", lon: "<<longitude << " | Z: "<<z <<", height: "<<height <<" | Obs: "<< obs<<endl;}
         void print_point_xyz(){cout<< "X: "<< x <<" | Y: "<< y << " | Z: "<< z <<endl;}
 
 
@@ -119,10 +119,14 @@ class obstacle{
         double get_obs_height(){return height;}
         double get_radius(){return radius;}
 
+        //sobrecarga de operadores
+        obstacle& operator= (const obstacle& o);
+
 };
 
 //talvez essa funcao seja excluida e coloque o que ela faz no pathfinding.h ja que e pouca coisa
 Malha transf(double lat, double lon, double h); //seila pq q botei a funcao no final aqui tinha motivo mas nao lembro
 void add_obs (Malha &M, obstacle &O); //add a obstacle *PRECISA DE MAIS TESTES*
+obstacle gen_rand(Malha& m); //gerador de obstáculos
 
 #endif // Point_H
