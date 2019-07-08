@@ -59,7 +59,7 @@ class Point
 
         //functions
         double distance_from(Point &P);
-        double distance_from(double Dlat, double Dlon);
+        double distance_from(double Dlat, double Dlon, double DH);
 
         //prints
         void print_point(){cout.precision(10); cout<< "X: "<< x <<", lat: " << latitude <<" | Y: "<< y<<", lon: "<<longitude << " | Z: "<<z <<", height: "<<height <<" | Obs: "<< obs<<endl;}
@@ -80,7 +80,7 @@ class Malha{
         vector <Point> malha;
 
         //Constructors:
-        Malha(Point &P);
+        Malha(Point &P, int nlat = 12, int nlon = 12, int nh = 6);
         //Malha(double la, double lo, double he); -- Nao precisei
         //Malha(double la, double lo); --Nao precisei
 
@@ -107,6 +107,13 @@ class obstacle{
         double obs_lat;
         double obs_lon;
 
+        //iniciais e finais
+        double lat_i = obs_lat - radius*(1.0/111139);
+        double lat_f = obs_lat + radius*(1.0/111139);
+        double lon_i = obs_lon - radius*(1.0/111139);
+        double lon_f = obs_lon + radius*(1.0/111139);
+
+
     public:
         //constructor
         obstacle(double lat, double lon, double h, double r): obs_lat(lat), obs_lon(lon), height(h), radius(r){}
@@ -119,6 +126,10 @@ class obstacle{
         double get_obs_height(){return height;}
         double get_radius(){return radius;}
 
+        //print
+        void print_obs(){cout<< "H: " << height << ", R: " << radius << ", Lat: " << obs_lat << ", Lon: " << obs_lon<<endl;}
+        void print_obs_limit(){cout<< "H: " << height << ", Lat: "<< lat_i << ", " << lat_f<< ", Lon: "<< lon_i << ", " << lon_f << endl;}
+
         //sobrecarga de operadores
         obstacle& operator= (const obstacle& o);
 
@@ -126,7 +137,7 @@ class obstacle{
 
 //talvez essa funcao seja excluida e coloque o que ela faz no pathfinding.h ja que e pouca coisa
 Malha transf(double lat, double lon, double h); //seila pq q botei a funcao no final aqui tinha motivo mas nao lembro
-void add_obs (Malha &M, obstacle &O); //add a obstacle *PRECISA DE MAIS TESTES*
-obstacle gen_rand(Malha& m); //gerador de obstáculos
+void gen_rand_obs(Malha& m, int qt); //gerador de obstáculos
+void add_obs (Malha &M, obstacle &O); //add a obstacle
 
 #endif // Point_H
