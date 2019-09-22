@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <time.h>
+#include <stdlib.h>
 #define pi 3.14159
 #define EARTH_R 6378137
 
@@ -64,6 +66,7 @@ class Point
         //prints
         void print_point(){cout.precision(10); cout<< "X: "<< x <<", lat: " << latitude <<" | Y: "<< y<<", lon: "<<longitude << " | Z: "<<z <<", height: "<<height <<" | Obs: "<< obs<<endl;}
         void print_point_xyz(){cout<< "X: "<< x <<" | Y: "<< y << " | Z: "<< z <<endl;}
+        void print_point_xy(){cout<< "X: "<< x <<" | Y: "<< y <<endl;}
 
 
 };
