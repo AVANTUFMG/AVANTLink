@@ -222,9 +222,9 @@ void gen_rand_obs(Malha& m, int qt){
         add_obs(m, ran_obs);
 
         //printando obstaculo:
-        cout<<"-----Sobs-----"<<endl;
-        ran_obs.print_obs();
-        ran_obs.print_obs_limit();
-        cout<<"-----Eobs-----"<<endl;
+        //cout<<"-----Sobs-----"<<endl;
+        //ran_obs.print_obs();
+        //ran_obs.print_obs_limit();
+        //cout<<"-----Eobs-----"<<endl;
     }
 }
