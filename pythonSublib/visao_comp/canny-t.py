@@ -56,40 +56,53 @@ def impcsv (pict,achados,encontrados,time):
 for j in range(1,39):
         picture= str(j) + ".jpg"
         ima = cv2.imread(picture)
-        ima = imax = cv2.resize(ima,(largura,altura)) 
+        ima = imax = cv2.resize(ima,(largura,altura))
 
-        kernel = np.ones((3,3),np.float32)
+        ima = cv2.cvtColor(ima,cv2.COLOR_RGB2HSV_FULL)
+
+        kernel = np.ones((5,5),np.float32)
 
         t0 = time.time()
         
-        #ima = cv2.GaussianBlur(ima,(5,5),0,1)
-        ima = cv2.bilateralFilter(ima,7,110,110) #redução de ruídos
-        ima = cv2.morphologyEx(ima,cv2.MORPH_DILATE,kernel) #tentar "consertar" objetos tratados
+        ima = cv2.GaussianBlur(ima,(3,3),0,1)
+        ima = cv2.bilateralFilter(ima,5,80,80) #redução de ruídos
+        ima = cv2.morphologyEx(ima,cv2.MORPH_DILATE,kernel) #tenta "consertar" objetos tratados
         
-        #contorno=cv2.Canny(ima,100,150)
-        contorno=cv2.Canny(ima,150,250,0,3,3)
 
-        im2,cnts,hi = cv2.findContours(contorno,cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        for i in range(1,2):
+                contorno=cv2.Canny(ima[:,:,i],120,220)
+                contorno2 = cv2.Canny(ima[:,:,i+1],120,220)
+                contorno3 = cv2.merge((contorno,contorno2,contorno2))
+                contorno3 = cv2.cvtColor(contorno3,cv2.COLOR_RGB2GRAY)
 
-        achados = 0
+                im2,cnts,hi = cv2.findContours(contorno3,cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-        for cont in cnts:
-                X,Y,W,H = cv2.boundingRect(cont) 
-                rect = cv2.minAreaRect(cont)
-                box = cv2.boxPoints(rect)
-                box = np.int0(box)
-                dimens = distancias(box)        
-                if dimens[0]/dimens[1] > 0.5 and dimens[0]/dimens[1] < 1.9  and dimens[1]*dimens[0] >45 :   
-                        cv2.drawContours(imax,[box],0,(255,0,0),1)
-                        cut(picture,X,Y,W,H,achados)
-                        achados +=1       
+                if (i==1):
+                        achados = 0
+
+                for cont in cnts:
+                        X,Y,W,H = cv2.boundingRect(cont) 
+                        rect = cv2.minAreaRect(cont)
+                        box = cv2.boxPoints(rect)
+                        box = np.int0(box)
+                        dimens = distancias(box)        
+                        if dimens[0]/dimens[1] > 0.5 and dimens[0]/dimens[1] < 1.9  and dimens[1]*dimens[0] >100 :   
+                                cv2.drawContours(imax,[box],0,(255,0,0),1)
+                                #cut(picture,X,Y,W,H,achados)
+                                achados +=1       
 
         t1 = time.time()
-        #print (t1 -t0)
+        x= str(round(t1-t0,5))
+        x="tempo: " + x
 
+
+
+        cv2.putText(imax, str(x),(5,450),cv2.FONT_HERSHEY_SIMPLEX,0.5,(255,0,0),1,cv2.LINE_AA)
         cv2.imshow("imagem"+picture, imax)
-        #cv2.imwrite("t1"+"-"+ picture,imax)
+        cv2.imwrite("t6"+"-"+ picture,imax)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
-        #obj_enc = input("quantos objetos encontrados")
-        #impcsv(picture,achados,obj_enc,x)
+        obj_enc = 0
+        obj_enc = input("quantos objetos encontrados")
+        impcsv(picture,achados,obj_enc,x)
+        
