@@ -22,12 +22,13 @@ std::regex regVeloPosicao("(^(\\b(\\d{1,4})(\\.\\d{1,6})?\\b, \\b(\\d+)\\b)$)");
 std::regex regVeloPosRepet("(^(\\b(\\d{1,4})(\\.\\d{1,6})?\\b, \\b(\\d+)\\b, \\b(\\d+)\\b)$)");
 std::regex regVeloRepeticao("(^(\\b(\\d{1,4})(\\.\\d{1,6})?\\b, , \\b(\\d+)\\b)$)");
 
-
+// Autoexplicativos
 bool vantConnected = false;
-int sizerShown;
 bool missaoSalva = false;
+Missao* missaoAtual = nullptr;
 
-Missao* missaoAtual;
+// Variável que guarda qual tela está sendo exibida no momento
+int sizerShown;
 
 //Janela principal
 MainFrame* MainWin;
@@ -54,7 +55,7 @@ bool MainApp::OnInit()
 	return true;
 }
 
-//Eventos chamados ao clicar nos botões do menu
+//Eventos disparados ao clicar nos botões do menu
 BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 	// Menu Principal
 	EVT_BUTTON(BUTTON_Connect, ConnectToVant)
@@ -75,6 +76,7 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 
 	// Carregar Missão
 	EVT_LISTBOX_DCLICK(LISTBOX_EtapasLoad, ShowRota)
+	EVT_BUTTON(BUTTON_EditarMissao, EditMission)
 END_EVENT_TABLE()
 
 
@@ -102,9 +104,10 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos, const wxSize& si
 	Maximize();
 }
 
-
+// Chamado por OnInit quando o programa é aberto para exibir o Menu Principal
 void MainFrame::ShowMainMenu() {
 
+	// Cria os componentes da interface (só botões nesse caso)
 	MainSizer = new wxBoxSizer(wxVERTICAL);
 	MainMenuSizer = new wxBoxSizer(wxVERTICAL);
 
@@ -120,12 +123,13 @@ void MainFrame::ShowMainMenu() {
 	BtnLoadMission = new wxButton(this, BUTTON_LoadMission, wxT("Carregar Missão"),
 		wxPoint(20, 230), wxSize(200, 50));
 
-	BtnCurrentMission = new wxButton(this, BUTTON_CurrentConnection, wxT("Mostrar Missão Atual do VANT"),
+	BtnCurrentMission = new wxButton(this, BUTTON_CurrentMission, wxT("Mostrar Missão Atual do VANT"),
 		wxPoint(20, 300), wxSize(200, 50));
 
 	BtnConfigureAirframe = new wxButton(this, BUTTON_ConfigureAirframe, wxT("Configurar Airframe"),
 		wxPoint(20, 370), wxSize(200, 50));
 
+	// Adiciona os componentes ao sizer do menu
 	MainMenuSizer->Add(BtnConnectVant, 0, wxALL, 20);
 	MainMenuSizer->Add(BtnTelemetry, 0, wxALL, 20);
 	MainMenuSizer->Add(BtnCreateMission, 0, wxALL, 20);
@@ -133,12 +137,14 @@ void MainFrame::ShowMainMenu() {
 	MainMenuSizer->Add(BtnCurrentMission, 0, wxALL, 20);
 	MainMenuSizer->Add(BtnConfigureAirframe, 0, wxALL, 20);
 
+	// Adiciona sizer do menu ao sizer principal
 	MainSizer->Add(MainMenuSizer);
 	MainWin->SetSizer(MainSizer);
 
 }
 
-
+// Chamado quando o botão "Voltar ao Menu Principal" de *qualquer* tela é clicado. O comportamento de todos os botões 
+// desse tipo é o mesmo, logo, a mesma função pode ser utilizada
 void MainFrame::Voltar(wxCommandEvent &evt) {
 	switch (sizerShown) 
 	{
@@ -164,7 +170,7 @@ void MainFrame::Voltar(wxCommandEvent &evt) {
 }
 
 
-//Os métodos associados aos botões do menu principal
+// Chamado quando o botão "Conectar a um VANT" é clicado
 void MainFrame::ConnectToVant(wxCommandEvent& evt)
 {
 	ConfigConnectionSizer = new wxBoxSizer(wxVERTICAL);
@@ -189,7 +195,7 @@ void MainFrame::ConnectToVant(wxCommandEvent& evt)
 	sizerShown = SHOWN_ConfigConnectionSizer;
 }
 
-
+// Chamado quando o botão "Mostrar Telemetria" é clicado
 void MainFrame::ViewTelemetry(wxCommandEvent &evt)
 {
 
@@ -275,6 +281,7 @@ void MainFrame::ViewTelemetry(wxCommandEvent &evt)
 			wxPoint(20, 380), wxSize(200, 50));
 
 
+		// Adiciona todos os componentes ao sizer
 		TelemetrySizer->Add(bitrateSizer);
 		TelemetrySizer->Add(velocitySizer);
 		TelemetrySizer->Add(batteryTensionSizer);
@@ -283,14 +290,18 @@ void MainFrame::ViewTelemetry(wxCommandEvent &evt)
 		TelemetrySizer->Add(heightSizer);
 		TelemetrySizer->Add(BtnVoltar, 0, wxALL, 20);
 
+		// Troca a tela de menu principal pela de telemetria
 		MainMenuSizer->DeleteWindows();
 		MainSizer->Replace(MainMenuSizer, TelemetrySizer);
 
+		// Necessário para ter controle do estado atual do programa i.e. qual tela está sendo exibida
 		sizerShown = SHOWN_TelemetrySizer;
 
 	}
 	else 
 	{
+
+		// Exibe um dialog se nenhum VANT estiver conectado para exibir a telemetria
 		wxMessageDialog* noConnectionDialog = new wxMessageDialog(MainWin, wxT("Nenhum VANT conectado no momento"),
 			wxT("Sem conexão"), wxOK, wxDefaultPosition);
 
@@ -300,14 +311,14 @@ void MainFrame::ViewTelemetry(wxCommandEvent &evt)
 	evt.Skip();
 }
 
-
+// Chamado quando o botão "Criar Missão" é clicado
 void MainFrame::CreateMission(wxCommandEvent& evt)
 {
 	ShowMissionEditor();
 	evt.Skip();
 }
 
-
+// Chamado quando o botão "Carregar Missão" é clicado
 void MainFrame::LoadMission(wxCommandEvent& evt)
 {
 	ShowMissionDisplay();
@@ -338,7 +349,7 @@ void MainFrame::LoadMission(wxCommandEvent& evt)
 	evt.Skip();
 }
 
-
+// Carrega os dados do disco para exibí-los no display carregado por ShowMissionDisplay
 void MainFrame::ShowMissionData() {
 
 	list<Etapa>::iterator iterEtapa;
@@ -347,20 +358,20 @@ void MainFrame::ShowMissionData() {
 	nome->SetLabel(missaoAtual->getNomeMissao());
 	nome->Refresh();
 
-	//Esse la�o � o que percorre a lista de etapas, imprimindo tudo
+	//Esse laço é o que percorre a lista de etapas, imprimindo tudo
 	for (iterEtapa = missaoAtual->etapas.begin(), iterVelo = missaoAtual->velocidades.begin();
 		iterEtapa != missaoAtual->etapas.end(), iterVelo != missaoAtual->velocidades.end(); iterEtapa++, iterVelo++) {
 
 		Etapa etAux = *iterEtapa;
 
-		//LA�O PARA DIZER QUAL O TIPO
+		//LAÇO PARA DIZER QUAL O TIPO
 		if (etAux.getTipoEtapa() == 'a') {
 
 			double distDoisPontos = etAux.getABusca().getDist();
 			int numeroVertices = etAux.getABusca().getNumVertices();
 			double velo = *iterVelo;
-			//Pros vertices eu n�o consegui, o getVert() j� imprime direto na tela, talvez precisemos de um novo
-			//m�todo pra pegar os valores dos v�rtices, se j� n�o tiver um que eu n�o saiba.
+			//Pros vertices eu não consegui, o getVert() já imprime direto na tela, talvez precisemos de um novo
+			//método pra pegar os valores dos vértices, se já não tiver um que eu não saiba.
 
 			// Falta adicionar as coordenadas dos vértices
 			std::stringstream ssDist;
@@ -438,12 +449,26 @@ void MainFrame::ShowMissionData() {
 	}
 }
 
+// Chamado quando o botão "Mostrar Missão Atual do VANT" é clicado
 void MainFrame::CurrentMission(wxCommandEvent& evt)
 {
+	if (missaoAtual == nullptr) {
+		// Exibe um dialog se ocorrer um erro ao exibir a missão (e.g. não há missão para ser carregada)
+		wxMessageDialog* noConnectionDialog = new wxMessageDialog(MainWin, wxT("Ocorreu um erro ao exibir a missão. Verifique se realmente há uma missão em andamento"),
+			wxT("Erro"), wxOK, wxDefaultPosition);
+
+		noConnectionDialog->ShowModal();
+	}
+	else {
+		ShowMissionDisplay();
+		ShowMissionData();
+	}
+	
 	evt.Skip();
 }
 
-
+// Função para mostrar o display da missão. Usado tanto quando carrega missão do disco quanto 
+// quando mostra a missão atual
 void MainFrame::ShowMissionDisplay()
 {
 	//Sizer pai
@@ -513,10 +538,14 @@ void MainFrame::ShowMissionDisplay()
 	wxButton* visualizar = new wxButton(MainWin, BUTTON_VisualizarMissao, wxT("Visualizar Missão"), wxPoint(20, 330),
 		wxSize(120, 30));
 
-	wxButton* voltar = new wxButton(MainWin, BUTTON_Voltar, wxT("Voltar ao Menu Principal"), wxPoint(160, 330),
+	wxButton* editar = new wxButton(MainWin, BUTTON_EditarMissao, wxT("Editar Missão"), wxPoint(160, 330),
+		wxSize(120, 30));
+
+	wxButton* voltar = new wxButton(MainWin, BUTTON_Voltar, wxT("Voltar ao Menu Principal"), wxPoint(320, 330),
 		wxSize(200, 30));
 
 	buttonsSizer->Add(visualizar, 0, wxLEFT, 20);
+	buttonsSizer->Add(editar, 0, wxLEFT, 20);
 	buttonsSizer->Add(voltar, 0, wxLEFT, 20);
 
 	LoadMissionSizer->Add(nomeSizer);
@@ -656,10 +685,118 @@ void MainFrame::ShowMissionEditor()
 	CreateMissionSizer->Add(velocidadeBotSizer, 0, wxLEFT, 130);
 	CreateMissionSizer->Add(buttonsSizer);
 
-	MainMenuSizer->DeleteWindows();
-	MainSizer->Replace(MainMenuSizer, CreateMissionSizer);
+	if (sizerShown == SHOWN_LoadMissionSizer) {
+		// Veio pelo botão de "Editar Missão" 
+		LoadMissionSizer->DeleteWindows();
+		MainSizer->Replace(LoadMissionSizer, CreateMissionSizer);
+
+	}
+	else {
+		// Veio pelo botão de "Criar Missão"
+		MainMenuSizer->DeleteWindows();
+		MainSizer->Replace(MainMenuSizer, CreateMissionSizer);
+	}
 
 	sizerShown = SHOWN_CreateMissionSizer;
+}
+
+void MainFrame::EditMission(wxCommandEvent &evt) {
+	// Mostrar a interface do editor
+	ShowMissionEditor();
+
+	// Carregar os dados da missão para os componentes no editor
+	list<Etapa>::iterator iterEtapa;
+	list<double>::iterator iterVelo;
+
+	nomeCtrl->ChangeValue(missaoAtual->getNomeMissao());
+	
+	//Esse laço é o que percorre a lista de etapas, imprimindo tudo
+	for (iterEtapa = missaoAtual->etapas.begin(), iterVelo = missaoAtual->velocidades.begin();
+		iterEtapa != missaoAtual->etapas.end(), iterVelo != missaoAtual->velocidades.end(); iterEtapa++, iterVelo++) {
+
+		Etapa etAux = *iterEtapa;
+
+		//LAÇO PARA DIZER QUAL O TIPO
+		if (etAux.getTipoEtapa() == 'a') {
+
+			double distDoisPontos = etAux.getABusca().getDist();
+			int numeroVertices = etAux.getABusca().getNumVertices();
+			double velo = *iterVelo;
+			//Pros vertices eu não consegui, o getVert() já imprime direto na tela, talvez precisemos de um novo
+			//método pra pegar os valores dos vértices, se já não tiver um que eu não saiba.
+
+			// Falta adicionar as coordenadas dos vértices
+			std::stringstream ssDist;
+			ssDist << std::fixed << std::setprecision(2) << distDoisPontos;
+			std::string areaLabel = to_string(numeroVertices) + ", " + ssDist.str() + "; ";
+
+			std::string verticesString;
+			for (int j = 0; j < numeroVertices; j++) {
+				verticesString = etAux.getABusca().getVerticesString(j);
+				areaLabel = areaLabel + verticesString;
+			}
+
+			areaLabel = areaLabel + " - Área de busca";
+			etapasListBox->Append(wxString(areaLabel));
+
+			std::stringstream ssVelo;
+			ssVelo << std::fixed << std::setprecision(2) << velo;
+			velocidadesListBox->Append(wxString(ssVelo.str()));
+		}
+
+		else if (etAux.getTipoEtapa() == 'f') {
+
+			double latChegada = etAux.getDestino().getLastPoint().get_latitude();
+			double lonChegada = etAux.getDestino().getLastPoint().get_longitude();
+			double velo = *iterVelo;
+
+			// Formatar os pontos para duas casas decimais ao invés de seis
+			std::stringstream ssLat, ssLon;
+			ssLat << std::fixed << std::setprecision(2) << latChegada;
+			ssLon << std::fixed << std::setprecision(2) << lonChegada;
+
+			std::string chegadaLabel = "Chegada: " + ssLat.str() + ", " + ssLon.str();
+
+			posChegadaCtrl->SetLabel(chegadaLabel);
+
+		}
+
+		else if (etAux.getTipoEtapa() == 'i') {
+
+			double latPartida = etAux.getOrigem().getInitialPoint().get_latitude();
+			double lonPartida = etAux.getOrigem().getInitialPoint().get_longitude();
+			double velo = *iterVelo;
+
+			std::stringstream ssLat, ssLon;
+			ssLat << std::fixed << std::setprecision(2) << latPartida;
+			ssLon << std::fixed << std::setprecision(2) << lonPartida;
+
+			std::string partidaLabel = "Partida: " + ssLat.str() + ", " + ssLon.str();
+
+			posPartidaCtrl->SetLabel(partidaLabel);
+		}
+
+		else if (etAux.getTipoEtapa() == 'w') {
+
+			double latPonto = etAux.getWaypoint().get_latitude();
+			double lonPonto = etAux.getWaypoint().get_longitude();
+			double altPonto = etAux.getWaypoint().get_height();
+			double velo = *iterVelo;
+
+			std::stringstream ssLat, ssLon, ssH, ssVelo;
+			ssLat << std::fixed << std::setprecision(2) << latPonto;
+			ssLon << std::fixed << std::setprecision(2) << lonPonto;
+			ssH << std::fixed << std::setprecision(2) << altPonto;
+			ssVelo << std::fixed << std::setprecision(2) << velo;
+
+			std::string pontoLabel = ssLat.str() + ", " + ssLon.str() + ", " + ssH.str() + " - Waypoint";
+			etapasListBox->Append(wxString(pontoLabel));
+
+			velocidadesListBox->Append(wxString(ssVelo.str()));
+		}
+
+		cout << endl;
+	}
 }
 
 void MainFrame::ShowRota(wxCommandEvent& evt)
