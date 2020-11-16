@@ -6,10 +6,10 @@
 #include <regex>
 
 
-class MainApp : public wxApp    //A classe da aplicaÁ„o propriamente dita
+class MainApp : public wxApp    //A classe da aplica√ß√£o propriamente dita
 {
 public:
-	virtual bool OnInit();	//Chamada quando incia a aplicaÁ„o
+	virtual bool OnInit();	//Chamada quando incia a aplica√ß√£o
 
 };
 
@@ -20,10 +20,10 @@ public:
 
 	wxScrolledWindow* scrolledWindow;
 
-	//Salva o path do arquivo da miss„o no disco
+	//Salva o path do arquivo da miss√£o no disco
 	wxString MissionPath;
 
-	//Botıes menu principal
+	//Bot√µes menu principal
 	wxButton* BtnVoltar;
 	wxButton* BtnConnectVant;
 	wxButton* BtnTelemetry;
@@ -33,11 +33,11 @@ public:
 	wxButton* BtnCurrentMission;
 
 
-	//Botıes de "Conectar a um VANT"
+	//Bot√µes de "Conectar a um VANT"
 	wxButton* BtnCurrentConnection;
 	wxButton* BtnNewConnection;
 
-	// Itens de "Criar Miss„o"
+	// Itens de "Criar Miss√£o"
 	wxTextCtrl* adicionarEtapaCtrl;
 	wxButton* adicionarEtapaBtn;
 	wxListBox* etapasListBox;
@@ -46,14 +46,14 @@ public:
 	wxListBox* velocidadesListBox;
 	wxRadioBox* etapaRadioBox;
 
-	//Itens de "Carregar Miss„o"
+	//Itens de "Carregar Miss√£o"
 	wxStaticText* nome;
 	wxStaticText* pontoPartidaText;
 	wxStaticText* pontoChegadaText;
 	wxListBox* etapas;
 	wxListBox* velocidades;
 
-	//MÈtodos chamados pelos itens do menu
+	//M√©todos chamados pelos itens do menu
 	void ShowMainMenu();
 	void Voltar(wxCommandEvent& evt);
 	void ConnectToVant(wxCommandEvent &evt);
@@ -66,7 +66,7 @@ public:
 	void ShowRota(wxCommandEvent& evt);
 	void ConfigureAirframe(wxCommandEvent& evt);
 
-	// Parte de criar miss„o	
+	// Parte de criar miss√£o	
 	void AdicionarEtapa(wxCommandEvent& evt);
 	void RemoverEtapa(wxCommandEvent& evt);
 	void EditarEtapa(wxMouseEvent& evt);
@@ -79,15 +79,15 @@ public:
 	wxTextCtrl* posChegadaCtrl;
 
 	/*
-	 * O int retornado È uma flag para indicar um erro
+	 * O int retornado √© uma flag para indicar um erro
 	 * 
 	 * -1 -> erro desconhecido
 	 * 0 -> bem sucedido
-	 * 1 -> erro em "PosiÁ„o de Partida"
-	 * 2 -> erro em "PosiÁ„o de Chegada"
+	 * 1 -> erro em "Posi√ß√£o de Partida"
+	 * 2 -> erro em "Posi√ß√£o de Chegada"
 	 * 3 -> valor acima do limite e.g latitude = 90.5
 	 * 4 -> tamanhos diferentes para as listas de etapas e velocidades
-	 * 5 -> quantidade errada de vÈrtices inforados para a etapa de busca
+	 * 5 -> quantidade errada de v√©rtices informados para a etapa de busca
 	 */
 	int IniciarMissao();
 
@@ -96,33 +96,34 @@ public:
 	bool validateString(std::string str, std::regex reg);
 	
 	/*
-	 * O int retornado informa se a posiÁ„o est· incluÌda, ou tambÈm se houve um erro de digitaÁ„o
+	 * O int retornado informa se a posi√ß√£o est√° inclu√≠da, ou tamb√©m se houve um erro de digita√ß√£o
 	 * 
-	 * -1 -> n„o bateu com nenhum; provavelmente erro de digitaÁ„o
+	 * -1 -> n√£o bateu com nenhum; provavelmente erro de digita√ß√£o
 	 * 0 -> apenas a etapa (adiciona ao fim da lista)
-	 * 1 -> a etapa e a posiÁ„o
+	 * 1 -> a etapa e a posi√ß√£o
 	 * 
-	 * o mesmo padr„o se repete para waypoint e area
+	 * o mesmo padr√£o se repete para waypoint e area
 	 */
 	int validateStringWaypoint(std::string str);
 	int validateStringArea(std::string str);
 
 
 	/*
-	 * O int retornado diz qual o que foi inserido (velocidade; velocidade + posiÁ„o; velocidade + posiÁ„o + repetiÁ„o, 
-	 * velocidade + repetiÁ„o 
+	 * O int retornado diz qual o que foi inserido (velocidade; velocidade + posi√ß√£o; velocidade + posi√ß√£o + repeti√ß√£o, 
+	 * velocidade + repeti√ß√£o 
 	 * 
-	 * -1 -> nenhum, provavelmente erro de digitaÁ„o
-	 * 0 -> velocidade (È adicionada uma vez e na ˙ltima posiÁ„o)
-	 * 1 -> velocidade + posicao (È adicionada uma vez e na posiÁ„o indicada)
-	 * 2 -> velocidade + posiÁ„o + repetiÁ„o (È adicionada 'repetiÁ„o' vezes a partir da posiÁ„o indicada)
-	 * 3 -> velocidade + repetiÁ„o (È adicionada 'repetiÁ„o' vezes a partir da ˙ltima posiÁ„o)
+	 * -1 -> nenhum, provavelmente erro de digita√ß√£o
+	 * 0 -> velocidade (√© adicionada uma vez e na √∫ltima posi√ß√£o)
+	 * 1 -> velocidade + posicao (√© adicionada uma vez e na posi√ß√£o indicada)
+	 * 2 -> velocidade + posi√ß√£o + repeti√ß√£o (√© adicionada 'repeti√ß√£o' vezes a partir da posi√ß√£o indicada)
+	 * 3 -> velocidade + repeti√ß√£o (√© adicionada 'repeti√ß√£o' vezes a partir da √∫ltima posi√ß√£o)
 	 */
 	int validateStringVelocidade(std::string str);
 
 
-	//Parte de carregar miss„o
+	//Parte de carregar miss√£o
 	void ShowMissionData();
+	void EditMission(wxCommandEvent &evt);
 
 	DECLARE_EVENT_TABLE();
 };
@@ -146,12 +147,12 @@ enum
 	BUTTON_ConfigureAirframe,			
 	BUTTON_CurrentMission,				
 	
-	// Configurar Conex„o
+	// Configurar Conex√£o
 	BUTTON_CurrentConnection,
 	BUTTON_NewConnection,
 	BUTTON_Voltar,
 
-	// Criar Miss„o
+	// Criar Miss√£o
 	TEXTCTRL_NomeMissao,
 	TEXTCTRL_PosPartida,
 	TEXTCTRL_PosChegada,
@@ -165,14 +166,14 @@ enum
 	BUTTON_EnviarMissao,
 	RADIOBOX_Etapa,
 
-	//Carregar miss„o
+	//Carregar miss√£o
 	STATICTEXT_NomeMissao,
 	STATICTEXT_PontoPartida,
 	STATICTEXT_PontoChegada,
 	LISTBOX_EtapasLoad,
 	LISTBOX_VelocidadesLoad,
-	BUTTON_VisualizarMissao
+	BUTTON_VisualizarMissao,
+	BUTTON_EditarMissao
 };
 
 DECLARE_APP(MainApp);
-
