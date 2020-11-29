@@ -36,7 +36,7 @@ $(PROJ_NAME): $(OBJECTS)
 	@ echo " "
 	@ $(CXX) -o $(PROJ_NAME)  $(OBJECTS) $(WX_LIBS)
 	@ echo "------------------------------------------------------------"
-	@ echo "$(PROJ_NAME) criado com sucesso!"
+	@ echo "$(PROJ_NAME) criado com sucesso! Digite ./$(PROJ_NAME) e aperte Enter para executá-lo"
 	@ echo " "
 
 
