@@ -47,13 +47,7 @@ $ sudo bash install.sh
 ```
 O comando `sudo` é necessário, pois o script usa o `apt` para gerenciar os pacotes e precisa de acesso ao arquivo `/etc/apt/sources.list`.
 
-Após o término do download e instalação, execute os comandos
-
-```
-$ make clean	# não é obrigatório, porém recomendado para evitar convergências
-$ make all
-```
-para executar o makefile que irá montar o programa. 
+Após o término do download e instalação, o script automaticamente executará o makefile para montar o AVANTLink e tudo estará pronto. 
 
 ------------------------------
 

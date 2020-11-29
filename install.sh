@@ -1,18 +1,4 @@
-# STATUS:
-#
-# SUPOSTAMENTE PRONTO (NÃO TESTADO):
-#  - instalar a biblioteca no Debian
-#
-# PENDENTE:
-#  - instalar a biblioteca no Fedora e OpenSUSE
-#  - chamar o makefile quando terminar a instalação
-#
-#
-# Obs.: no momento ele exige que o usuário passe o diretório onde instalou o AVANTLink como argumento ou 
-# que ele execute o script dentro do AVANTLink. Isso acontee porque a ideia é executar o makefile em seguida,
-# apesar de isso ainda não estar implementado.
-# =========================================================================================================
-
+#!/bin/bash
 
 # Verifica se o caminho informado é válido e corresponde ao AVANTLink
 verificar_dir(){
@@ -25,9 +11,7 @@ verificar_dir(){
 	fi
 }
 
-# Script que de fato instala a biblioteca. Se só quiser instalar e n executar o makefile, deve poder fazer
-# $ source download_wxwidgets.sh
-# $ instlar_bib
+# Script que de fato instala a biblioteca
 instalar_bib() {
 	
 	get_os_info
@@ -42,12 +26,6 @@ instalar_bib() {
 		
 	fi
 	
-
-	# Cria as pastas necessárias
-	[[ ! -d lib ]] && mkdir lib
-	[[ ! -d lib/WxWidgets ]] && mkdir lib/WxWidgets/
-	cd lib/WxWidgets
-
 	
 	# Adiciona a chave de autenticação ao apt
 	apt-key adv --fetch-keys $key_url
@@ -71,8 +49,10 @@ instalar_bib() {
 	apt-get install	wx3.0-i18n
 	apt-get install	wx3.0-examples
 	apt-get install	wx3.0-doc
-
+	
+	echo " "
 	echo "wxWidgets instalado com sucesso"
+	echo " "
 
 }
 
@@ -152,19 +132,36 @@ elif [ ! `verificar_dir` ]; then
 	exit 1
 
 else 
-	cd $path
 	confirmar
 
 	
 fi
 
 
-if [ -f "$path/makefile" ]; then
-	make -f clean
+src_dir="src"
+include_dir="include"
+build_dir="build"
+
+[[ ! -d "$build_dir" ]] && mkdir build
+[[ -f "$build_dir/"*.cpp ]] && rm "$build_dir/"*.cpp
+[[ -f "$build_dir/"*.h ]] && rm "$build_dir/".h
+[[ -f "$build_dir/".hpp ]] && rm "$build_dir/"*.hpp
+
+pwd
+
+cp "$src_dir/"*.cpp "$build_dir"
+cp "$include_dir/"*.h "$build_dir"
+cp "$include_dir/"*.hpp "$build_dir"
+
+if [ -f "$path/"makefile ]; then
+	make clean
 	make all
 	
 	echo "Para executar o programa, digite ./Cordyceps e aperte Enter"
+	echo " "
 fi
+
+[[ -d "$build_dir" ]] && rm -r "$build_dir"
 
 exit 0
 

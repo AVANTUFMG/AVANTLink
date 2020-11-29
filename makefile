@@ -5,7 +5,7 @@
 # Definindo algumas variáveis
 #
 
-PROJ_NAME=Cordyceps
+PROJ_NAME=AVANTLink
 SRC_FILES=$(wildcard ./build/*.cpp)
 H_FILES=$(wildcard ./build/*.h)
 OBJECTS:=$(patsubst ./build/%.cpp,./obj/%.o,$(wildcard ./build/*.cpp))
@@ -21,7 +21,11 @@ WX_CXXFLAGS=$(shell wx-config --cxxflags)
 # Compilação e linkagen
 #
 
-all: prep $(PROJ_NAME)
+all: obj_folder $(PROJ_NAME)
+
+
+obj_folder:
+	@ if [ ! -d "./obj" ]; then mkdir obj; fi
 
 
 $(PROJ_NAME): $(OBJECTS)
@@ -33,7 +37,6 @@ $(PROJ_NAME): $(OBJECTS)
 	@ $(CXX) -o $(PROJ_NAME)  $(OBJECTS) $(WX_LIBS)
 	@ echo "------------------------------------------------------------"
 	@ echo "$(PROJ_NAME) criado com sucesso!"
-	@ rm -r build
 	@ echo " "
 
 
@@ -43,20 +46,9 @@ $(PROJ_NAME): $(OBJECTS)
 	@ echo " "
 
 
-prep:
-	@ if [ ! -d "./obj" ]; then mkdir obj; fi
-	@ if [ ! -d "./build" ]; then mkdir build; fi
-	@ rm build/*.cpp
-	@ rm build/*.h
-	@ rm build/*.hpp
-	@ cp src/*.cpp build/
-	@ cp include/*.h build/
-	@ cp include/*.hpp build/
-
-
 clean:
 	@ rm -f ./obj/*.o $(PROJ_NAME)
 	@ if [ -d "./obj" ]; then rmdir obj; fi
 
-.PHONY: all prep clean
+.PHONY: all clean
 
