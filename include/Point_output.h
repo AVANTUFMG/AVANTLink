@@ -1,5 +1,5 @@
-#ifndef Point_H
-#define Point_H
+#ifndef Point_output_H
+#define Point_output_H
 
 #include <iostream>
 #include <cmath>
@@ -14,16 +14,16 @@
 
 
 //double transf(double lat, double lon, double h, double r, double lat_o, double lon_o); -- teste apenas ignorar
-//Malha transf(double lat, double lon, double h); -- teste apenas ignorar
+//Malha_O transf(double lat, double lon, double h); -- teste apenas ignorar
 
-//functions used to calculate distance between two points (colocar tudo dentro da classe pontos?? Acho que nao)
-double D_to_RAD(double D_x); //degrees to radians
-double DELTA(double start, double destiny);//DELTA (start - destiny)
-double distance_two_points(double lat1, double lat2, double delta_lon, double delta_lat); //distance between two points in KM (needs deltas, in radians)
-double distance_between_two_points(double D_lat, double D_lon, double D_lat_destiny, double D_lon_destiny); //distance between two lat/lon points (in deegres, principal function)
+//functions used to calculate distance between two Point_Os (colocar tudo dentro da classe pontos?? Acho que nao)
+double D_to_RAD_O(double D_x); //degrees to radians
+double DELTA_O(double start, double destiny);//DELTA (start - destiny)
+double distance_two_Point_Os(double lat1, double lat2, double delta_lon, double delta_lat); //distance between two Point_Os in KM (needs deltas, in radians)
+double distance_between_two_Point_Os(double D_lat, double D_lon, double D_lat_destiny, double D_lon_destiny); //distance between two lat/lon Point_Os (in deegres, principal function)
 
 using namespace std;
-class Point
+class Point_O
 {
     private:
         double latitude;
@@ -38,12 +38,12 @@ class Point
 
     public:
         //constructors
-        Point(double lat, double lon, double h) : latitude(lat), longitude(lon), height(h){obs = 0;}
-        Point(double lat, double lon, double h, double i, double j, double k) : latitude(lat), longitude(lon), height(h), x(i), y(j), z(k){obs = 0;}
-        Point(double lat, double lon) : latitude(lat), longitude(lon){obs = 0;}
+        Point_O(double lat, double lon, double h) : latitude(lat), longitude(lon), height(h){obs = 0;}
+        Point_O(double lat, double lon, double h, double i, double j, double k) : latitude(lat), longitude(lon), height(h), x(i), y(j), z(k){obs = 0;}
+        Point_O(double lat, double lon) : latitude(lat), longitude(lon){obs = 0;}
 
         //setters
-        void set_point(double lat, double lon, double h){latitude = lat; longitude = lon; height = h;}
+        void set_Point_O(double lat, double lon, double h){latitude = lat; longitude = lon; height = h;}
         void set_x(double aux){x = aux;}
         void set_y(double aux){y = aux;}
         void set_z(double aux){z = aux;}
@@ -60,50 +60,50 @@ class Point
         int get_obs() {return obs;}
 
         //functions
-        double distance_from(Point &P);
+        double distance_from(Point_O &P);
         double distance_from(double Dlat, double Dlon, double DH);
 
         //prints
-        void print_point(){cout.precision(10); cout<< "X: "<< x <<", lat: " << latitude <<" | Y: "<< y<<", lon: "<<longitude << " | Z: "<<z <<", height: "<<height <<" | Obs: "<< obs<<endl;}
-        void print_point_xyz(){cout<< "X: "<< x <<" | Y: "<< y << " | Z: "<< z <<endl;}
-        void print_point_xy(){cout<< "X: "<< x <<" | Y: "<< y <<endl;}
+        void print_Point_O(){cout.precision(10); cout<< "X: "<< x <<", lat: " << latitude <<" | Y: "<< y<<", lon: "<<longitude << " | Z: "<<z <<", height: "<<height <<" | Obs: "<< obs<<endl;}
+        void print_Point_O_xyz(){cout<< "X: "<< x <<" | Y: "<< y << " | Z: "<< z <<endl;}
+        void print_Point_O_xy(){cout<< "X: "<< x <<" | Y: "<< y <<endl;}
 
 
 };
 
-class Malha{
+class Malha_O{
     private:
-        //vector <Point> malha;
-        int N_Points;
+        //vector <Point_O> malha;
+        int N_Point_Os;
         int N_lat;
         int N_lon;
         int N_H;
     public:
         //Variable public bc it's easier
-        vector <Point> malha;
+        vector <Point_O> malha;
 
         //Constructors:
-        Malha(Point &P, int nlat = 12, int nlon = 12, int nh = 6);
+        Malha_O(Point_O &P, int nlat = 12, int nlon = 12, int nh = 6);
         //Malha(double la, double lo, double he); -- Nao precisei
         //Malha(double la, double lo); --Nao precisei
 
         //getters
-        vector <Point> get_malha(){return malha;}
+        vector <Point_O> get_malha(){return malha;}
         int get_N_lat(){return N_lat;}
         int get_N_lon(){return N_lon;}
         int get_N_H(){return N_H;}
-        int get_N_Points(){return N_Points;}
+        int get_N_Point_Os(){return N_Point_Os;}
 
-        //void add_point(); -- nao precisei
+        //void add_Point_O(); -- nao precisei
 
         //Prints
-        void print_malha(); //prints lat lon h and x y z from every point
-        void print_malha_xyz(); //print just x y z from every point
-        void print_point_malha_xyz(int i){malha[i].print_point_xyz();} //print just x, y and z about a specific point from malha
-        void print_point_malha(int i){cout.precision(9); malha[i].print_point();} //print just info about a specific point from malha
+        void print_malha(); //prints lat lon h and x y z from every Point_O
+        void print_malha_xyz(); //print just x y z from every Point_O
+        void print_Point_O_malha_xyz(int i){malha[i].print_Point_O_xyz();} //print just x, y and z about a specific Point_O from malha
+        void print_Point_O_malha(int i){cout.precision(9); malha[i].print_Point_O();} //print just info about a specific Point_O from malha
 };
 
-class obstacle{
+class obstacle_o{
     private:
         double height;
         double radius;
@@ -119,7 +119,7 @@ class obstacle{
 
     public:
         //constructor
-        obstacle(double lat, double lon, double h, double r): obs_lat(lat), obs_lon(lon), height(h), radius(r){}
+        obstacle_o(double lat, double lon, double h, double r): obs_lat(lat), obs_lon(lon), height(h), radius(r){}
 
         //functions --none so far
 
@@ -134,13 +134,13 @@ class obstacle{
         void print_obs_limit(){cout<< "H: " << height << ", Lat: "<< lat_i << ", " << lat_f<< ", Lon: "<< lon_i << ", " << lon_f << endl;}
 
         //sobrecarga de operadores
-        obstacle& operator= (const obstacle& o);
+        obstacle_o& operator= (const obstacle_o& o);
 
 };
 
 //talvez essa funcao seja excluida e coloque o que ela faz no pathfinding.h ja que e pouca coisa
-Malha transf(double lat, double lon, double h); //seila pq q botei a funcao no final aqui tinha motivo mas nao lembro
-void gen_rand_obs(Malha& m, int qt); //gerador de obstáculos
-void add_obs (Malha &M, obstacle &O); //add a obstacle
+Malha_O transf_O(double lat, double lon, double h); //seila pq q botei a funcao no final aqui tinha motivo mas nao lembro
+void gen_rand_obs_O(Malha_O& m, int qt); //gerador de obstáculos
+void add_obs_O (Malha_O &M, obstacle_o &O); //add a obstacle
 
-#endif // Point_H
+#endif // Point_O_H

@@ -58,25 +58,25 @@ bool MainApp::OnInit()
 //Eventos disparados ao clicar nos botões do menu
 BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 	// Menu Principal
-	EVT_BUTTON(BUTTON_Connect, ConnectToVant)
-	EVT_BUTTON(BUTTON_Telemetry, ViewTelemetry)
-	EVT_BUTTON(BUTTON_CreateMission, CreateMission)
-	EVT_BUTTON(BUTTON_LoadMission, LoadMission)
-	EVT_BUTTON(BUTTON_ConfigureAirframe, ConfigureAirframe)
-	EVT_BUTTON(BUTTON_CurrentMission, CurrentMission)
-	EVT_BUTTON(BUTTON_Voltar, Voltar)
+	EVT_BUTTON(BUTTON_Connect, MainFrame::ConnectToVant)
+	EVT_BUTTON(BUTTON_Telemetry, MainFrame::ViewTelemetry)
+	EVT_BUTTON(BUTTON_CreateMission, MainFrame::CreateMission)
+	EVT_BUTTON(BUTTON_LoadMission, MainFrame::LoadMission)
+	EVT_BUTTON(BUTTON_ConfigureAirframe, MainFrame::ConfigureAirframe)
+	EVT_BUTTON(BUTTON_CurrentMission, MainFrame::CurrentMission)
+	EVT_BUTTON(BUTTON_Voltar, MainFrame::Voltar)
 
 	// Criar Missão
-	EVT_BUTTON(BUTTON_AdicionarEtapa, AdicionarEtapa)
-	EVT_LISTBOX_DCLICK(LISTBOX_Etapas, RemoverEtapa)
-	EVT_BUTTON(BUTTON_AdicionarVelocidade, AdicionarVelocidade)
-	EVT_LISTBOX_DCLICK(LISTBOX_Velocidades, RemoverVelocidade)
-	EVT_BUTTON(BUTTON_SalvarMissao, SalvarMissao)
-	EVT_BUTTON(BUTTON_EnviarMissao, EnviarMissao)
+	EVT_BUTTON(BUTTON_AdicionarEtapa, MainFrame::AdicionarEtapa)
+	EVT_LISTBOX_DCLICK(LISTBOX_Etapas, MainFrame::RemoverEtapa)
+	EVT_BUTTON(BUTTON_AdicionarVelocidade, MainFrame::AdicionarVelocidade)
+	EVT_LISTBOX_DCLICK(LISTBOX_Velocidades, MainFrame::RemoverVelocidade)
+	EVT_BUTTON(BUTTON_SalvarMissao, MainFrame::SalvarMissao)
+	EVT_BUTTON(BUTTON_EnviarMissao, MainFrame::EnviarMissao)
 
 	// Carregar Missão
-	EVT_LISTBOX_DCLICK(LISTBOX_EtapasLoad, ShowRota)
-	EVT_BUTTON(BUTTON_EditarMissao, EditMission)
+	EVT_LISTBOX_DCLICK(LISTBOX_EtapasLoad, MainFrame::ShowRota)
+	EVT_BUTTON(BUTTON_EditarMissao, MainFrame::EditMission)
 END_EVENT_TABLE()
 
 
@@ -801,9 +801,9 @@ void MainFrame::EditMission(wxCommandEvent &evt) {
 
 void MainFrame::ShowRota(wxCommandEvent& evt)
 {
-	AllocConsole();
-	freopen("CONOUT$", "w", stdout);
-	freopen("CONOUT$", "w", stderr);
+	// AllocConsole();
+	// freopen("CONOUT$", "w", stdout);
+	// freopen("CONOUT$", "w", stderr);
 
 	int posicao = etapas->GetSelection();
 
@@ -1208,19 +1208,20 @@ int MainFrame::IniciarMissao()
 
 			double lat, lon;
 
-			//Texto inteiro retirado da caixa de texto
+			// Texto inteiro retirado da caixa de texto
 			std::string input = std::string((posPartidaCtrl->GetValue()).mb_str());
 			size_t pos = 0;
 
-			//Delimitadores para recortar as strings das caixas de texto
+			// Delimitadores para recortar as strings das caixas de texto
+
 			std::string delimeter1 = "; ";
 			std::string delimeter2 = ", ";
 			std::string delimeter3 = " -";
 
-			//Mostrar o terminal
-			AllocConsole();
-			freopen("CONOUT$", "w", stdout);
-			freopen("CONOUT$", "w", stderr);
+			// Mostrar o terminal
+			// AllocConsole();
+			// freopen("CONOUT$", "w", stdout);
+			// freopen("CONOUT$", "w", stderr);
 
 
 			//Valida para evitar typos

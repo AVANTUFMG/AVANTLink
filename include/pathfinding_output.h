@@ -1,10 +1,10 @@
-#ifndef PATHFINDING_H_INCLUDED
-#define PATHFINDING_H_INCLUDED
-#include "Point.h"
+#ifndef PATHFINDING_OUTPUT_H_INCLUDED
+#define PATHFINDING_OUTPUT_H_INCLUDED
+#include "Point_output.h"
 
 //recebe a latitude longitude e altura do drone e do destino e tbm quantidade de obstasculos:
-vector <Point> pathfinding_2D(double lat_drone, double lon_drone, double h_drone, double lat_dest, double lon_dest, double h_dest, int q_obs); // return next point to go
-vector <Point> pathfinding_3D(double lat_drone, double lon_drone, double h_drone, double lat_dest, double lon_dest, double h_dest, int q_obs);
+vector <Point_O> pathfinding_2D(double lat_drone, double lon_drone, double h_drone, double lat_dest, double lon_dest, double h_dest, int q_obs); // return next Point_O to go
+vector <Point_O> pathfinding_3D(double lat_drone, double lon_drone, double h_drone, double lat_dest, double lon_dest, double h_dest, int q_obs);
 
 #endif // PATHFINDING_H_INCLUDED
 
@@ -21,6 +21,6 @@ vector <Point> pathfinding_3D(double lat_drone, double lon_drone, double h_drone
 
 
 //outras funcoes que podem vir a serem usadas no futuro, por enquanto nada-----------------------------------------
-//vector <Point> pathfinding_test(double lat_drone, double lon_drone, double h_drone, double lat_dest, double lon_dest, double h_dest, int q_obs);
-//vector <Point> search_path(const Malha &M, double lat_dest, double lon_dest, double h_dest);
-//vector <Point> pathfinding_real(double lat_drone, double lon_drone, double h_drone);
+//vector <Point_O> pathfinding_test(double lat_drone, double lon_drone, double h_drone, double lat_dest, double lon_dest, double h_dest, int q_obs);
+//vector <Point_O> search_path(const Malha &M, double lat_dest, double lon_dest, double h_dest);
+//vector <Point_O> pathfinding_real(double lat_drone, double lon_drone, double h_drone);

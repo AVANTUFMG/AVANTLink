@@ -1,9 +1,9 @@
-#include "Point.h"
+#include "Point_output.h"
 
 using namespace std;
 
-//Malha--------------------------------------------------------------
-Malha::Malha(Point &P, int nlat, int nlon, int nh){
+//Malha_O--------------------------------------------------------------
+Malha_O::Malha_O(Point_O &P, int nlat, int nlon, int nh){
     //VANT in (x,y,z) = (0,0,0)
     int c = 0; //counter
     N_lat = 40;
@@ -17,7 +17,7 @@ Malha::Malha(Point &P, int nlat, int nlon, int nh){
     for(int k = -N_H; k<= N_H; k++){
         for(int j = -N_lon; j<=N_lon; j++){
             for(int i = -N_lat; i<=N_lat;i++){
-                Point aux(P.get_latitude() + (i*0.000135),P.get_longitude() + (j*0.000135), P.get_height() + 15*k);
+                Point_O aux(P.get_latitude() + (i*0.000135),P.get_longitude() + (j*0.000135), P.get_height() + 15*k);
                 aux.set_x(i*15);
                 aux.set_y(j*15);
                 aux.set_z(k*15);
@@ -26,40 +26,40 @@ Malha::Malha(Point &P, int nlat, int nlon, int nh){
             }
         }
     }
-    N_Points = c;
+    N_Point_Os = c;
 }
 
-void Malha::print_malha(){
+void Malha_O::print_malha(){
     for(int i = 0; i<malha.size();i++){
         cout.precision(9);
-        print_point_malha(i);
+        print_Point_O_malha(i);
         cout<<endl;
     }
 }
 
-void Malha::print_malha_xyz(){
+void Malha_O::print_malha_xyz(){
     for(int i = 0; i<malha.size();i++){
-        print_point_malha_xyz(i);
+        print_Point_O_malha_xyz(i);
         cout<<endl;
     }
 }
 
 
 //Functions--------------------------------------------------------------------------
- double D_to_RAD(double D_x){
+ double D_to_RAD_O(double D_x){
         double R_x;
         R_x = D_x*(pi/180);
         return(R_x);
     }
 
-double DELTA(double start, double destiny){
+double DELTA_O(double start, double destiny){
         double delta;
         delta = start - destiny;
         delta = sqrt(pow(delta,2));
         return (delta);
     }
 
-double distance_two_points(double lat1, double lat2, double delta_lon, double delta_lat, double radius){
+double distance_two_Point_Os(double lat1, double lat2, double delta_lon, double delta_lat, double radius){
         double a, b, dist;
 
         a = (pow(sin((delta_lat/2)),2)) + cos(lat1)*(cos(lat2))*(pow(sin((delta_lon/2)), 2));
@@ -68,50 +68,50 @@ double distance_two_points(double lat1, double lat2, double delta_lon, double de
         return (dist);
     }
 
-double distance_between_two_points(double D_lat, double D_lon, double height, double D_lat_destiny, double D_lon_destiny, double height_destiny){
+double distance_between_two_Point_Os(double D_lat, double D_lon, double height, double D_lat_destiny, double D_lon_destiny, double height_destiny){
 
         double R_lat, R_lon, R_lat_destiny, R_lon_destiny, delta_lat, delta_lon, delta_h, distance, R_polar, R_equat, e, R;
 
 
         //transforming all degrees to radians
-        R_lon = D_to_RAD(D_lon);
-        R_lat = D_to_RAD(D_lat);
-        R_lat_destiny = D_to_RAD(D_lat_destiny);
-        R_lon_destiny = D_to_RAD(D_lon_destiny);
+        R_lon = D_to_RAD_O(D_lon);
+        R_lat = D_to_RAD_O(D_lat);
+        R_lat_destiny = D_to_RAD_O(D_lat_destiny);
+        R_lon_destiny = D_to_RAD_O(D_lon_destiny);
 
         //calculating delta
-        delta_lat = DELTA(R_lat, R_lat_destiny);
-        delta_lon = DELTA(R_lon, R_lon_destiny);
-        delta_h = DELTA(height, height_destiny);
+        delta_lat = DELTA_O(R_lat, R_lat_destiny);
+        delta_lon = DELTA_O(R_lon, R_lon_destiny);
+        delta_h = DELTA_O(height, height_destiny);
 
         //calculating radius
         R = (EARTH_R - (21.385*sin(D_lat)));
 
         //calculating distance
-        distance = distance_two_points(R_lat, R_lat_destiny, delta_lon, delta_lat, R);
+        distance = distance_two_Point_Os(R_lat, R_lat_destiny, delta_lon, delta_lat, R);
         distance = sqrt(distance*distance+delta_h*delta_h);
         //cout<<distance<<endl;
 
         return distance;
 }
 
-//Points-----------------------------------------------------------
-double Point::distance_from(Point &p){
+//Point_Os-----------------------------------------------------------
+double Point_O::distance_from(Point_O &p){
 
-        return(distance_between_two_points(this->get_latitude(), this->get_longitude(), this->get_height(),p.get_latitude(), p.get_longitude(), p.get_height()));
+        return(distance_between_two_Point_Os(this->get_latitude(), this->get_longitude(), this->get_height(),p.get_latitude(), p.get_longitude(), p.get_height()));
 }
-double Point::distance_from(double Dlat, double Dlon, double DH){
+double Point_O::distance_from(double Dlat, double Dlon, double DH){
 
-        return(distance_between_two_points(this->get_latitude(), this->get_longitude(), this->get_height(), Dlat, Dlon, DH));
+        return(distance_between_two_Point_Os(this->get_latitude(), this->get_longitude(), this->get_height(), Dlat, Dlon, DH));
 }
 
 //Transform function----------------------------------------------------------------------
 //talvez essa funcao seja excluida ja que nao está fazendo mt coisa, colocarei tudo no pathfinding.h
 //double transf(double lat, double lon, double h, double r, double lat_o, double lon_o){
-Malha transf(double lat, double lon, double h){
+Malha_O transf_O(double lat, double lon, double h){
 
-    Point P(lat,lon, h);
-    Malha M(P);
+    Point_O P(lat,lon, h);
+    Malha_O M(P);
 
     return M;
 }
@@ -120,7 +120,7 @@ Malha transf(double lat, double lon, double h){
 
 
 //Sobrecarga de =
-obstacle& obstacle::operator=(const obstacle& o){
+obstacle_o& obstacle_o::operator=(const obstacle_o& o){
 
     height = o.height;
 
@@ -134,7 +134,7 @@ obstacle& obstacle::operator=(const obstacle& o){
 
 }
 
-void add_obs (Malha &M, obstacle &O){
+void add_obs_O (Malha_O &M, obstacle_o &O){
 
     cout.precision(10);
     // 1 degree = 111,139 m or 1m = 1/111139 degrees
@@ -159,7 +159,7 @@ void add_obs (Malha &M, obstacle &O){
 }
 
 //gerador de obstáculos
-void gen_rand_obs(Malha& m, int qt){
+void gen_rand_obs_O(Malha_O& m, int qt){
 
     double max_lat, max_long, min_lat, min_long;
 
@@ -218,8 +218,8 @@ void gen_rand_obs(Malha& m, int qt){
 
         o_lon = (min_long) + r4*((max_long)-(min_long));
 
-        obstacle ran_obs(o_lat, o_lon, o_height, o_radius);//cria objeto
-        add_obs(m, ran_obs);
+        obstacle_o ran_obs(o_lat, o_lon, o_height, o_radius);//cria objeto
+        add_obs_O(m, ran_obs);
 
         //printando obstaculo:
         //cout<<"-----Sobs-----"<<endl;

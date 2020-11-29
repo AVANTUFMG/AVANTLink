@@ -1,5 +1,6 @@
 #include "Class_Point.h"
-//#include "Global_Functions.h"
+#include "Global_Functions.h"
+
 
 using namespace std;
 

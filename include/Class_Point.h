@@ -31,6 +31,7 @@ class Point
 
 
         //constructors
+	Point() {};
         Point(double lat, double lon, double h) : latitude(lat), longitude(lon), height(h){obs = 0;}
         Point(double lat, double lon, double h, double i, double j, double k) : latitude(lat), longitude(lon), height(h), x(i), y(j), z(k){obs = 0;}
         Point(double lat, double lon) : latitude(lat), longitude(lon){obs = 0;}

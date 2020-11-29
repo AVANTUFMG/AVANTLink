@@ -1,5 +1,5 @@
 #include <iostream>
-#include "pathfinding.h"
+#include "pathfinding_output.h"
 #include <cmath>
 using namespace std;
 

@@ -1,15 +1,15 @@
-#include "pathfinding.h"
+#include "pathfinding_output.h"
 #include <iostream>
 #include <fstream>
 using namespace std;
 
-vector <Point> pathfinding_2D(double lat_drone, double lon_drone, double h_drone, double lat_dest, double lon_dest, double h_dest, int q_obs){
+vector <Point_O> pathfinding_2D(double lat_drone, double lon_drone, double h_drone, double lat_dest, double lon_dest, double h_dest, int q_obs){
     //Pathfinding 2D with output in txt
 
     //Iicializacao dos valores
-    Malha M = transf(lat_drone, lon_drone, h_drone); //inicialização da malha
-    Point destiny(lat_dest, lon_dest, h_dest);       //inicialização do destino
-    vector <Point> points_list;                      //inicialização da lista de pontos que guardará o trajeto
+    Malha_O M = transf_O(lat_drone, lon_drone, h_drone); //inicialização da malha
+    Point_O destiny(lat_dest, lon_dest, h_dest);       //inicialização do destino
+    vector <Point_O> Point_Os_list;                      //inicialização da lista de pontos que guardará o trajeto
     int arrived = 0;
     int pos = -1;
 
@@ -23,10 +23,10 @@ vector <Point> pathfinding_2D(double lat_drone, double lon_drone, double h_drone
     output << 2*M.get_N_lat()+1<<"x"<< 2*M.get_N_lon()+1<<endl;
 
     //Colocando obstaculo aleatorio
-    gen_rand_obs(M, q_obs);
+    gen_rand_obs_O(M, q_obs);
 
     //procurando os obstáculos e colocando no arquivo
-    for(int i = 0; i<= M.get_N_Points(); i++){
+    for(int i = 0; i<= M.get_N_Point_Os(); i++){
         if(M.malha[i].get_obs() == 1){
             output<< M.malha[i].get_x() << " " << M.malha[i].get_y()<<";";
             }
@@ -107,7 +107,7 @@ vector <Point> pathfinding_2D(double lat_drone, double lon_drone, double h_drone
             output <<endl<< M.get_malha()[pos_aux].get_x() <<" " << M.get_malha()[pos_aux].get_y() <<";"<<endl; //colocando no arquivo o ponto selecionado
 
             pos = pos_aux;
-            points_list.push_back(M.get_malha()[pos]);
+            Point_Os_list.push_back(M.get_malha()[pos]);
 
             if(distance < 8){
             arrived = 1;
@@ -115,22 +115,22 @@ vector <Point> pathfinding_2D(double lat_drone, double lon_drone, double h_drone
         }
     }while(arrived == 0);
 
-return points_list;
+return Point_Os_list;
 }
 
 
-vector <Point> pathfinding_3D(double lat_drone, double lon_drone, double h_drone, double lat_dest, double lon_dest, double h_dest, int q_obs){
+vector <Point_O> pathfinding_3D(double lat_drone, double lon_drone, double h_drone, double lat_dest, double lon_dest, double h_dest, int q_obs){
     //Fazer o construtor e destrutor copia da malha pode ser uma otima ideia
 
     //Iicializacao dos valores
-    Malha M = transf(lat_drone, lon_drone, h_drone);
-    Point destiny(lat_dest, lon_dest, h_dest);
+    Malha_O M = transf_O(lat_drone, lon_drone, h_drone);
+    Point_O destiny(lat_dest, lon_dest, h_dest);
     int arrived = 0;
     int pos = -1;
-    vector <Point> points_list;
+    vector <Point_O> Point_Os_list;
 
     //Colocando obstaculo aleatorio
-    gen_rand_obs(M, q_obs);
+    gen_rand_obs_O(M, q_obs);
 
     //Printando a malha
     //M.print_malha();
@@ -303,7 +303,7 @@ vector <Point> pathfinding_3D(double lat_drone, double lon_drone, double h_drone
             }
 
             pos = pos_aux;
-            points_list.push_back(M.get_malha()[pos]);
+            Point_Os_list.push_back(M.get_malha()[pos]);
 
             if(distance < 8){
             arrived = 1;
@@ -311,5 +311,5 @@ vector <Point> pathfinding_3D(double lat_drone, double lon_drone, double h_drone
         }
     }while(arrived == 0);
 
-return points_list;
+return Point_Os_list;
 }
