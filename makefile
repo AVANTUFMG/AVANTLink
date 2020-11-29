@@ -33,6 +33,7 @@ $(PROJ_NAME): $(OBJECTS)
 	@ $(CXX) -o $(PROJ_NAME)  $(OBJECTS) $(WX_LIBS)
 	@ echo "------------------------------------------------------------"
 	@ echo "$(PROJ_NAME) criado com sucesso!"
+	@ rm -r build
 	@ echo " "
 
 
@@ -57,5 +58,5 @@ clean:
 	@ rm -f ./obj/*.o $(PROJ_NAME)
 	@ if [ -d "./obj" ]; then rmdir obj; fi
 
-
 .PHONY: all prep clean
+

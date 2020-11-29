@@ -38,27 +38,22 @@ Por fim, se quiser compilar o código via terminal ou alguma outra IDE siga as i
 
 
 #### GNU/Linux
-Usuários das distribuições Ubuntu e Debian do Linux podem executr o script `download_wxwidgets.sh` para baixar os arquivos necessários para sua máquina. O script está disponível através [deste link](adicionarlink). 
+Usuários do Debian e Ubuntu podem executar o script `install.sh` para baixar os arquivos necessários para sua máquina. O script está incluído no repositório. 
 
-*Nota: para usuários do Fedora e openSUSE o script está em desenvolvimento*
-
-Após baixar o arquivo, abra o terminal e execute o seguinte comando (dentro do diretório que contém o arquivo):
+Após baixar o AVANTLink, abra o terminal e execute o seguinte comando (dentro do diretório do AVANTLink ou passando o caminho para o diretório como parâmetro):
 
 ```
-$ sudo bash download_wxwidgets.sh
+$ sudo bash install.sh
 ```
 O comando `sudo` é necessário, pois o script usa o `apt` para gerenciar os pacotes e precisa de acesso ao arquivo `/etc/apt/sources.list`.
 
-Após o término do download e instalação, vá até o diretório que contém os arquivos do AVANTLink e execute o comando
+Após o término do download e instalação, execute os comandos
 
 ```
-$ make
+$ make clean	# não é obrigatório, porém recomendado para evitar convergências
+$ make all
 ```
-para executar o make file que irá montar o programa.
-
-#### MacOS
-
-Siga as instruções [neste link](https://www.macworld.co.uk/how-to/how-install-linux-on-mac-3637265/) e depois as instruções logo acima. 
+para executar o makefile que irá montar o programa. 
 
 ------------------------------
 

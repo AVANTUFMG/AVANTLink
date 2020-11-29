@@ -74,23 +74,8 @@ instalar_bib() {
 
 	echo "wxWidgets instalado com sucesso"
 
-
-	montar_AVANTLink
-	
-	echo "Para executar o programa, digite ./Cordyceps e aperte Enter"
-
-	exit 0
-
 }
 
-
-montar_AVANTLink() {
-	echo "Prosseguindo para compilação do AVANTLink"
-
-	make -f clean
-	make -f all
-	
-}
 
 # Só para o usuário confirmar que quer instalar
 confirmar() {
@@ -169,6 +154,17 @@ elif [ ! `verificar_dir` ]; then
 else 
 	cd $path
 	confirmar
+
 	
 fi
+
+
+if [ -f "$path/makefile" ]; then
+	make -f clean
+	make all
+	
+	echo "Para executar o programa, digite ./Cordyceps e aperte Enter"
+fi
+
+exit 0
 
