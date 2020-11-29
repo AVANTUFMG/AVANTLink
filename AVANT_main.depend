@@ -1,0 +1,45 @@
+# depslib dependency file v1.0
+1531805716 source:/home/caio/Documents/avant/AVANT_main/src/AVANTConnect.cpp
+	"AVANTConnect.h"
+	<Print.h>
+	<cstring>
+	<string>
+	<sys/socket.h>
+	<arpa/inet.h>
+	<mavlink.h>
+	<fcntl.h>
+	<stdio.h>
+	<stdlib.h>
+	<unistd.h>
+
+1531836557 /home/caio/Documents/avant/AVANT_main/include/AVANTConnect.h
+	<string>
+	<sys/socket.h>
+	<mavlink.h>
+
+1531802770 /home/caio/Documents/avant/AVANT_main/include/Print.h
+	<string>
+
+1531802784 source:/home/caio/Documents/avant/AVANT_main/src/Print.cpp
+	"Print.h"
+	<string>
+	<fstream>
+	<iostream>
+
+1531835985 source:/home/caio/Documents/avant/AVANT_main/main.cpp
+	<stdio.h>
+	<unistd.h>
+	<AVANTConnect.h>
+	<Print.h>
+	<AVANTLink.h>
+
+1531835379 /home/caio/Documents/avant/AVANT_main/include/AVANTLink.h
+	<mavlink.h>
+	<AVANTConnect.h>
+
+1531835354 source:/home/caio/Documents/avant/AVANT_main/src/AVANTLink.cpp
+	"AVANTLink.h"
+	<mavlink.h>
+	<Print.h>
+	<AVANTConnect.h>
+
