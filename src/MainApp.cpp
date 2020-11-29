@@ -1213,6 +1213,7 @@ int MainFrame::IniciarMissao()
 			size_t pos = 0;
 
 			// Delimitadores para recortar as strings das caixas de texto
+
 			std::string delimeter1 = "; ";
 			std::string delimeter2 = ", ";
 			std::string delimeter3 = " -";

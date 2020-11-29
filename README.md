@@ -38,6 +38,7 @@ Por fim, se quiser compilar o código via terminal ou alguma outra IDE siga as i
 
 
 #### GNU/Linux
+
 Usuários do Debian e Ubuntu podem executar o script `install.sh` para baixar os arquivos necessários para sua máquina. O script está incluído no repositório. 
 
 Após baixar o AVANTLink, abra o terminal e execute o seguinte comando (dentro do diretório do AVANTLink ou passando o caminho para o diretório como parâmetro):

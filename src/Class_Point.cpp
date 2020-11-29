@@ -1,6 +1,7 @@
 #include "Class_Point.h"
 #include "Global_Functions.h"
 
+
 using namespace std;
 
 double Point::distance_from(Point &p){
