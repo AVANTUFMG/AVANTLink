@@ -156,9 +156,6 @@ cp "$include_dir/"*.hpp "$build_dir"
 if [ -f "$path/"makefile ]; then
 	make clean
 	make all
-	
-	echo "Para executar o programa, digite ./Cordyceps e aperte Enter"
-	echo " "
 fi
 
 [[ -d "$build_dir" ]] && rm -r "$build_dir"
