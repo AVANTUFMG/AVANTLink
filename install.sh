@@ -147,8 +147,6 @@ build_dir="build"
 [[ -f "$build_dir/"*.h ]] && rm "$build_dir/".h
 [[ -f "$build_dir/".hpp ]] && rm "$build_dir/"*.hpp
 
-pwd
-
 cp "$src_dir/"*.cpp "$build_dir"
 cp "$include_dir/"*.h "$build_dir"
 cp "$include_dir/"*.hpp "$build_dir"

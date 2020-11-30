@@ -12,7 +12,6 @@ OBJECTS:=$(patsubst ./build/%.cpp,./obj/%.o,$(wildcard ./build/*.cpp))
 
 
 CXX=$(shell wx-config --cxx)
-CXX_FLAGS=
 
 WX_LIBS=$(shell wx-config --libs)
 WX_CXXFLAGS=$(shell wx-config --cxxflags)
@@ -36,7 +35,7 @@ $(PROJ_NAME): $(OBJECTS)
 	@ echo " "
 	@ $(CXX) -o $(PROJ_NAME)  $(OBJECTS) $(WX_LIBS)
 	@ echo "------------------------------------------------------------"
-	@ echo "$(PROJ_NAME) criado com sucesso!. Digite ./$(PROJ_NAME) e aperte Enter para executá-lo"
+	@ echo "$(PROJ_NAME) criado com sucesso! Digite ./$(PROJ_NAME) e aperte Enter para executá-lo"
 	@ echo " "
 
 
