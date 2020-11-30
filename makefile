@@ -12,7 +12,6 @@ OBJECTS:=$(patsubst ./build/%.cpp,./obj/%.o,$(wildcard ./build/*.cpp))
 
 
 CXX=$(shell wx-config --cxx)
-CXX_FLAGS=
 
 WX_LIBS=$(shell wx-config --libs)
 WX_CXXFLAGS=$(shell wx-config --cxxflags)
